@@ -1,13 +1,14 @@
 import { ObjectId } from "bson";
 import mongoose from "mongoose";
+import { Category } from "./category.js";
 
 const product = new mongoose.Schema({
   name: String,
   description: String,
-  categories: String,
+  category: {type:mongoose.Schema.Types.ObjectId,ref:"Category"},
   price: Number,
   offer: Number,
-  unit: Number,
+  unit: String,
   inStock: Boolean,
   quantity: Number,
 });

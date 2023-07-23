@@ -1,6 +1,7 @@
 import express from "express";
 import { init } from "./config/init.js";
 import { Product } from "./models/product.js";
+import productRoute from "./route/productRoute.js";
 init();
 const port = 3000;
 const server = express();
@@ -10,15 +11,5 @@ server.listen(port, () => {
   console.log(`server listening to port ${port}`);
 });
 
-const p = new Product({
-  name: "mobile",
-  description: "iphone",
-  categories: "mobile",
-  price: 50000,
-  offer: 50,
-  unit: 2,
-  inStock: true,
-  quantity: 1,
-});
-// p.save();
-Product.create(p);
+
+server.use("/products",productRoute)
