@@ -1,8 +1,10 @@
-import mongoose from "mongoose";
-import {   ObjectId } from 'bson';
+import mongoose, { Schema } from "mongoose";
 
-const category =new mongoose.Schema({ 
-    name:String,
-    parent: ObjectId
-})
-export const Category = mongoose.model("Category",category); 
+export const categorySchema = new mongoose.Schema({
+  name: String, //brown rice
+  parent: {
+    type: Schema.Types.ObjectId,
+    ref: "Category", // This should match the model name of the referenced collection
+  }, //rice catgory id
+});
+export const Category = mongoose.model("Category", categorySchema);

@@ -1,11 +1,10 @@
-import { ObjectId } from "bson";
 import mongoose from "mongoose";
-import { Category } from "./category.js";
+import { categorySchema } from "./category.js";
 
-const product = new mongoose.Schema({
+export const productSchema = new mongoose.Schema({
   name: String,
   description: String,
-  category: {type:mongoose.Schema.Types.ObjectId,ref:"Category"},
+  category: categorySchema,
   price: Number,
   offer: Number,
   unit: String,
@@ -13,4 +12,4 @@ const product = new mongoose.Schema({
   quantity: Number,
 });
 
-export const Product = mongoose.model("Product", product);
+export const Product = mongoose.model("Product", productSchema);
