@@ -21,7 +21,7 @@ categoryRoute.post("", (req, res) => {
 });
 categoryRoute.get("", (req, res) => {
   Category.find({})
-    .populate("parent")
+    .populate("parent") //instaed of sending id we send parent object here so take populate method
     .then((categories) => {
       res.status(200).send({ ok: true, data: categories });
     })
@@ -32,6 +32,7 @@ categoryRoute.get("", (req, res) => {
 categoryRoute.get("/:id", (req, res) => {
   const { id } = req.params;
   Category.findOne({ _id: id })
+    .populate("parent")
     .then((category) => {
       res.status(200).send({ ok: true, data: category });
     })
