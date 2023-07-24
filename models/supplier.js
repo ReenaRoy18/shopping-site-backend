@@ -1,9 +1,9 @@
 import { ObjectId } from "bson";
 import mongoose from "mongoose";
 
-const supplier = mongoose.Schema({
+const supplierSchema = mongoose.Schema({
   name: String,
-  address: [ObjectId],
+  address: ObjectId,
 });
 
-export const Supplier = mongoose.model("Supplier", Supplier);
+export const Supplier = mongoose.model("Supplier", supplierSchema);

@@ -1,5 +1,6 @@
 import express from "express";
 import { Category } from "../models/category.js";
+import mongoose, { Types } from "mongoose";
 const categoryRoute = express.Router();
 
 categoryRoute.post("", (req, res) => {
@@ -20,6 +21,7 @@ categoryRoute.post("", (req, res) => {
 });
 categoryRoute.get("", (req, res) => {
   Category.find({})
+    .populate("parent")
     .then((categories) => {
       res.status(200).send({ ok: true, data: categories });
     })
@@ -59,6 +61,17 @@ categoryRoute.delete("/:id", (req, res) => {
   Category.deleteOne({ _id: id })
     .then((category) => {
       res.status(200).send({ ok: true, data: category });
+    })
+    .catch((err) => {
+      res.status(400).send({ err });
+    });
+});
+categoryRoute.post("/children", (req, res) => {
+  const { _id } = req.body;
+  const parentId = new Types.ObjectId(_id);
+  Category.find({ parent: parentId })
+    .then((categories) => {
+      res.status(200).send({ ok: true, data: categories });
     })
     .catch((err) => {
       res.status(400).send({ err });

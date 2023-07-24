@@ -5,6 +5,7 @@ import adminRoute from "./route/Admin.route.js";
 import cors from "cors";
 import categoryRoute from "./route/Category.route.js";
 import userRoute from "./route/User.route.js";
+import supplierRoute from "./route/Supplier.route.js";
 init();
 
 const port = 3000;
@@ -19,4 +20,5 @@ server.listen(port, () => {
 server.use("/products", productRoute);
 server.use("/admin", adminRoute);
 server.use("/category", categoryRoute);
-server.use("/user",userRoute)
+server.use("/user", userRoute);
+server.use("/supplier", supplierRoute);
