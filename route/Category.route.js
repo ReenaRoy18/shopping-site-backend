@@ -3,7 +3,7 @@ import { Category } from "../models/category.js";
 import mongoose, { Types } from "mongoose";
 const categoryRoute = express.Router();
 
-categoryRoute.post("", (req, res) => {
+categoryRoute.post("/", (req, res) => {
   const category = req.body;
 
   const categoryObj = new Category({
