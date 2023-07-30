@@ -10,6 +10,11 @@ export const productSchema = new mongoose.Schema({
   unit: String,
   inStock: Boolean,
   quantity: Number,
+  isDeleted:{
+    type:Boolean,
+    default:false
+  }
 });
 
 export const Product = mongoose.model("Product", productSchema);
+

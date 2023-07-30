@@ -21,8 +21,9 @@ categoryRoute.post("", (req, res) => {
 });
 
 categoryRoute.get("", (req, res) => {
-  Category.find({})
+  Category.find({isDeleted:false})
     .populate("parent") //instaed of sending id we send parent object here so take populate method
+    .select("-isDeleted")
     .then((categories) => {
       res.status(200).send({ ok: true, data: categories });
     })
@@ -33,8 +34,9 @@ categoryRoute.get("", (req, res) => {
 
 categoryRoute.get("/:id", (req, res) => {
   const { id } = req.params;
-  Category.findOne({ _id: id })
+  Category.findOne({ _id: id ,isDeleted:false})
     .populate("parent")
+    .select("-isDeleted")
     .then((category) => {
       res.status(200).send({ ok: true, data: category });
     })
@@ -61,9 +63,10 @@ categoryRoute.put("/:id", (req, res) => {
 
 categoryRoute.delete("/:id", (req, res) => {
   const { id } = req.params;
-  Category.deleteOne({ _id: id })
+  Category.updateOne({ _id: id },{isDeleted:true})
+  
     .then((category) => {
-      res.status(200).send({ ok: true, data: category });
+      res.status(200).send({ ok: true });
     })
     .catch((err) => {
       res.status(400).send({ err });

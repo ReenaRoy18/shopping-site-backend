@@ -5,6 +5,11 @@ export const categorySchema = new mongoose.Schema({
   parent: {
     type: Schema.Types.ObjectId,
     ref: "Category", // This should match the model name of the referenced collection
-  }, //rice catgory id
+    
+  },
+  isDeleted:{
+    type:Boolean,
+    default:false
+  }
 });
 export const Category = mongoose.model("Category", categorySchema);

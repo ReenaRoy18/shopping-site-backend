@@ -32,7 +32,8 @@ productRoute.post("/", (req, res) => {
 });
 
 productRoute.get("", (req, res) => {
-  Product.find({})
+  Product.find({isDeleted:false})
+  .select("-isDeleted")
     .then((products) => {
       res.status(200).send(products);
     })
@@ -43,7 +44,8 @@ productRoute.get("", (req, res) => {
 
 productRoute.get("/:id", (req, res) => {
   const { id } = req.params;
-  Product.findOne({ _id: id })
+  Product.findOne({ _id: id,isDeleted:false })
+  .select("-isDeleted")
     .then((product) => {
       res.status(200).send({ product });
     })
@@ -79,5 +81,16 @@ productRoute.put("/:id", (req, res) => {
       res.status(400).send(err);
     });
 });
+
+productRoute.delete("/:id",(req,res)=>{
+  const {id} = req.params;
+  Product.updateOne({_id:id},{isDeleted:true})
+  .then((product)=>{
+    res.status(200).send({ok:true})
+  }).catch(err=>{
+    res.status(400).send(err)
+  })
+})
+
 
 export default productRoute;
