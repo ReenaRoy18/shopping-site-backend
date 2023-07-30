@@ -76,7 +76,7 @@ categoryRoute.post("/children", (req, res) => {
   const { _id } = req.body;
   const parentId = new Types.ObjectId(_id);
   Category.find({ parent: parentId })
-    .populate("parent")
+    .populate("parent","-isDeleted")
     .then((categories) => {
       res.status(200).send({ ok: true, data: categories });
     })
