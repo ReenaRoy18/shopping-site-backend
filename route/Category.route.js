@@ -22,8 +22,11 @@ categoryRoute.post("/", (req, res) => {
 
 categoryRoute.get("", (req, res) => {
   Category.find({isDeleted:false})
-    .populate("parent") //instaed of sending id we send parent object here so take populate method
-    .select("-isDeleted")
+  .populate({
+    path:"parent",
+    select:"-isDeleted"
+  })
+  .select("-isDeleted")
     .then((categories) => {
       res.status(200).send({ ok: true, data: categories });
     })
@@ -35,7 +38,10 @@ categoryRoute.get("", (req, res) => {
 categoryRoute.get("/:id", (req, res) => {
   const { id } = req.params;
   Category.findOne({ _id: id ,isDeleted:false})
-    .populate("parent")
+  .populate({
+    path:"parent",
+    select:"-isDeleted"
+  })
     .select("-isDeleted")
     .then((category) => {
       res.status(200).send({ ok: true, data: category });
@@ -76,7 +82,7 @@ categoryRoute.post("/children", (req, res) => {
   const { _id } = req.body;
   const parentId = new Types.ObjectId(_id);
   Category.find({ parent: parentId })
-    .populate("parent","-isDeleted")
+    .populate({path:"parent",select:"-isDeleted"})
     .then((categories) => {
       res.status(200).send({ ok: true, data: categories });
     })
