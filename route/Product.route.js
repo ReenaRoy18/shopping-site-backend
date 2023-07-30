@@ -7,10 +7,12 @@ const productRoute = express.Router();
 productRoute.post("/", (req, res) => {
   const product = req.body;
   const parentObjectId = new Types.ObjectId(product.category.parent);
+  const imageUrl = product.image.path
 
   const productObj = new Product({
     name: product.name,
     description: product.description,
+    image:imageUrl,
     category: {
       name: product.category.name,
       parent: parentObjectId,
@@ -21,6 +23,7 @@ productRoute.post("/", (req, res) => {
     inStock: product.inStock,
     quantity: product.quantity,
   });
+  console.log(productObj);
   productObj
     .save()
     .then((product) => {
@@ -63,6 +66,7 @@ productRoute.put("/:id", (req, res) => {
   const updateProduct = {
     name: product.name,
     description: product.description,
+    image:product.image,
     category: {
       name: product.category.name,
       parent: parentObjectId,

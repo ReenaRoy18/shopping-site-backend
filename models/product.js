@@ -4,6 +4,7 @@ import { categorySchema } from "./category.js";
 export const productSchema = new mongoose.Schema({
   name: String,
   description: String,
+  image:String,
   category: categorySchema,
   price: Number,
   offer: Number,
