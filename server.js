@@ -7,6 +7,8 @@ import categoryRoute from "./route/Category.route.js";
 import userRoute from "./route/User.route.js";
 import supplierRoute from "./route/Supplier.route.js";
 import multer from "multer";
+import path from "path";
+import { log } from "console";
 init();
 
 const port = 3000;
@@ -14,27 +16,28 @@ const server = express();
 server.use(cors());
 server.use(express.json());
 
-const fileStorage = multer.diskStorage({ //value comes from multer
-  destination:(req,file,cb)=>{
-    cb(null,'images')
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "Images");
   },
-  filename:(req,file,cb)=>{
-    cb(null,new Date().toISOString() + '-' + file.originalname);
-  }
-})
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname));
+  },
+});
 
-const fileFilter = (req,file,cb)=>{
-  if(file.mimetype==="image/png" || file.mimetype==="image.jpg" || file.mimetype==="image/jpeg"){
+server.post("/upload", multer({ storage }).single("image"), (req, res) => {
+  res.status(200).send({
+    ok: true,
+    path: "http://localhost:3000/" + req.file.path.replace("\\", "/"),
+  });
+});
 
-    cb(null, true);
-  }
-  else{
-
-    cb(null,false)
-  }
-}
-
-server.use(multer({storage:fileStorage,fileFilter:fileFilter}).single('image'))
+server.get("/preview?path=:path", (req, res) => {
+  const imagePathFull = req.params["path"];
+  console.log("===========>", imagePathFull);
+  const imagePath = imagePathFull.slice(imagePathFull.indexOf("Images/") + 7);
+  res.sendFile("./Images/" + imagePath);
+});
 
 server.listen(port, () => {
   console.log(`server listening to port ${port}`);
