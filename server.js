@@ -8,13 +8,20 @@ import userRoute from "./route/User.route.js";
 import supplierRoute from "./route/Supplier.route.js";
 import multer from "multer";
 import path from "path";
-import { log } from "console";
+import fs from "fs";
 init();
 
 const port = 3000;
 const server = express();
 server.use(cors());
 server.use(express.json());
+
+if (!fs.existsSync("./Images")) {
+  fs.mkdir("./Images", { recursive: true }, (err) => {
+    err && console.error(err);
+  });
+  console.log("Create Images Folder");
+}
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
