@@ -28,15 +28,13 @@ const storage = multer.diskStorage({
 server.post("/upload", multer({ storage }).single("image"), (req, res) => {
   res.status(200).send({
     ok: true,
-    path: "http://localhost:3000/" + req.file.path.replace("\\", "/"),
+    path: req.file.path.replace("\\", "/"),
   });
 });
 
-server.get("/preview?path=:path", (req, res) => {
-  const imagePathFull = req.params["path"];
-  console.log("===========>", imagePathFull);
-  const imagePath = imagePathFull.slice(imagePathFull.indexOf("Images/") + 7);
-  res.sendFile("./Images/" + imagePath);
+server.get("/preview", (req, res) => {
+  const imagePathFull = "./" + req.query["path"];
+  res.sendFile(imagePathFull, { root: "." });
 });
 
 server.listen(port, () => {
