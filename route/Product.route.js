@@ -7,12 +7,10 @@ const productRoute = express.Router();
 productRoute.post("/", (req, res) => {
   const product = req.body;
   const parentObjectId = new Types.ObjectId(product.category.parent);
-  const imageUrl = product.image.path
-
   const productObj = new Product({
     name: product.name,
     description: product.description,
-    image:imageUrl,
+    image: product.image,
     category: {
       name: product.category.name,
       parent: parentObjectId,
@@ -35,8 +33,8 @@ productRoute.post("/", (req, res) => {
 });
 
 productRoute.get("", (req, res) => {
-  Product.find({isDeleted:false})
-  .select("-isDeleted")
+  Product.find({ isDeleted: false })
+    .select("-isDeleted")
     .then((products) => {
       res.status(200).send(products);
     })
@@ -47,8 +45,8 @@ productRoute.get("", (req, res) => {
 
 productRoute.get("/:id", (req, res) => {
   const { id } = req.params;
-  Product.findOne({ _id: id,isDeleted:false })
-  .select("-isDeleted")
+  Product.findOne({ _id: id, isDeleted: false })
+    .select("-isDeleted")
     .then((product) => {
       res.status(200).send({ product });
     })
@@ -66,7 +64,7 @@ productRoute.put("/:id", (req, res) => {
   const updateProduct = {
     name: product.name,
     description: product.description,
-    image:product.image,
+    image: product.image,
     category: {
       name: product.category.name,
       parent: parentObjectId,
@@ -86,15 +84,15 @@ productRoute.put("/:id", (req, res) => {
     });
 });
 
-productRoute.delete("/:id",(req,res)=>{
-  const {id} = req.params;
-  Product.updateOne({_id:id},{isDeleted:true})
-  .then((product)=>{
-    res.status(200).send({ok:true})
-  }).catch(err=>{
-    res.status(400).send(err)
-  })
-})
-
+productRoute.delete("/:id", (req, res) => {
+  const { id } = req.params;
+  Product.updateOne({ _id: id }, { isDeleted: true })
+    .then((product) => {
+      res.status(200).send({ ok: true });
+    })
+    .catch((err) => {
+      res.status(400).send(err);
+    });
+});
 
 export default productRoute;
