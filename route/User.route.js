@@ -4,13 +4,13 @@ import { deliveryAddress } from "../models/userAddress.js";
 const userRoute = express.Router();
 
 userRoute.post("", async (req, res) => {
-  const { email, password ,mobileNo , fullName} = req.body;
+  const { email, password, mobileNo, fullName } = req.body;
   try {
     const userObj = new User({
       email,
       password,
       mobileNo,
-      fullName
+      fullName,
     });
 
     await userObj.save();
@@ -20,6 +20,21 @@ userRoute.post("", async (req, res) => {
     console.log(err);
     res.status(500).json({ message: "failed to add", err });
   }
+});
+
+userRoute.post("/login", (req, res) => {
+  const { email, password } = req.body;
+  User.findOne({ email: email })
+    .then((user) => {
+      if (user.password == password) {
+        res.status(200).send({ ok: true, data: user });
+      } else {
+        res.status(400).send({ ok: false, data: "Password does not match" });
+      }
+    })
+    .catch((err) => {
+      res.status(404).send(err);
+    });
 });
 
 userRoute.get("", (req, res) => {
